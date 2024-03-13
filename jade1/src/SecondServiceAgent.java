@@ -26,7 +26,7 @@ public class SecondServiceAgent extends Agent {
             ex.printStackTrace();
         }
 
-        addBehaviour(new EsperantoCyclicBehaviour(this));
+        addBehaviour(new SecondEsperantoCyclicBehaviour(this));
         //doDelete();
     }
     protected void takeDown() {
@@ -78,11 +78,13 @@ public class SecondServiceAgent extends Agent {
 
 class SecondEsperantoCyclicBehaviour extends CyclicBehaviour
 {
-    ServiceAgent agent;
-    public SecondEsperantoCyclicBehaviour(ServiceAgent agent)
+    SecondServiceAgent agent;
+    public SecondEsperantoCyclicBehaviour(SecondServiceAgent agent)
     {
         this.agent = agent;
     }
+
+
     public void action()
     {
         MessageTemplate template = MessageTemplate.MatchOntology("esperanto");
