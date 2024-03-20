@@ -51,7 +51,6 @@ class MyCyclicBehaviour extends CyclicBehaviour {
 			int performative = message.getPerformative();
 			if (performative == ACLMessage.REQUEST)
 			{
-				//I cannot answer but I will search for someone who can
 				DFAgentDescription dfad = new DFAgentDescription();
 				ServiceDescription sd = new ServiceDescription();
 				sd.setName("dictionary");
@@ -78,7 +77,7 @@ class MyCyclicBehaviour extends CyclicBehaviour {
 				}
 			}
 			else
-			{	//when it is an answer
+			{
 				myAgent.displayHtmlResponse(content);
 			}
 		}
