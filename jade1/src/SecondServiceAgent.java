@@ -114,39 +114,4 @@ class SecondEsperantoCyclicBehaviour extends CyclicBehaviour
     }
 }
 
-class SecondDictionaryCyclicBehaviour extends CyclicBehaviour
-{
-    ServiceAgent agent;
-    public SecondDictionaryCyclicBehaviour(ServiceAgent agent)
-    {
-        this.agent = agent;
-    }
-    public void action()
-    {
-        MessageTemplate template = MessageTemplate.MatchOntology("dictionary");
-        ACLMessage message = agent.receive(template);
-        if (message == null)
-        {
-            block();
-        }
-        else
-        {
-            //process the incoming message
-            String content = message.getContent();
-            ACLMessage reply = message.createReply();
-            reply.setPerformative(ACLMessage.INFORM);
-            String response = "";
-            try
-            {
-                response = agent.makeRequest("english", content);
-            }
-            catch (NumberFormatException ex)
-            {
-                response = ex.getMessage();
-            }
-            reply.setContent(response);
-            agent.send(reply);
-        }
-    }
-}
 
