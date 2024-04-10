@@ -1,19 +1,18 @@
 package jadelab1;
-
 import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.*;
 import jade.domain.*;
 import jade.domain.FIPAAgentManagement.*;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
+import java.util.HashMap;
+import java.util.UUID;
 public class MyAgent extends Agent {
+	protected HashMap<String, String> requestMap = new HashMap<>(); //string klucz, wartosc
 	protected void setup () {
 		displayResponse("Hello, I am " + getAID().getLocalName());
 		addBehaviour(new MyCyclicBehaviour(this));
-		//doDelete();
+//doDelete();
 	}
 	protected void takeDown() {
 		displayResponse("See you");
@@ -35,7 +34,6 @@ public class MyAgent extends Agent {
 		tp.setText(html);
 	}
 }
-
 class MyCyclicBehaviour extends CyclicBehaviour {
 	MyAgent myAgent;
 	public MyCyclicBehaviour(MyAgent myAgent) {
@@ -51,6 +49,9 @@ class MyCyclicBehaviour extends CyclicBehaviour {
 			int performative = message.getPerformative();
 			if (performative == ACLMessage.REQUEST)
 			{
+//
+				String uniqueId = UUID.randomUUID().toString();
+				myAgent.requestMap.put(uniqueId, content);
 				DFAgentDescription dfad = new DFAgentDescription();
 				ServiceDescription sd = new ServiceDescription();
 				sd.setName("dictionary");
@@ -67,6 +68,7 @@ class MyCyclicBehaviour extends CyclicBehaviour {
 						forward.addReceiver(new AID(foundAgent, AID.ISLOCALNAME));
 						forward.setContent(content);
 						forward.setOntology(ontology);
+						forward.setReplyWith(uniqueId);
 						myAgent.send(forward);
 					}
 				}
@@ -78,7 +80,9 @@ class MyCyclicBehaviour extends CyclicBehaviour {
 			}
 			else
 			{
-				myAgent.displayHtmlResponse(content);
+				String requestWord = myAgent.requestMap.get(message.getInReplyTo());
+				String responseHTML = "Wpisane slowo: " + requestWord + "<br>" + "Tlumaczenie: " + content;
+				myAgent.displayHtmlResponse(responseHTML);
 			}
 		}
 	}
